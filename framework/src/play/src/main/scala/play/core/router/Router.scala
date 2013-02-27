@@ -164,6 +164,8 @@ object Router {
 
     def documentation: Seq[(String, String, String)]
 
+    def comments: Seq[Seq[String]]
+
     def routes: PartialFunction[RequestHeader, Handler]
 
     def setPrefix(prefix: String)

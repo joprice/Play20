@@ -945,6 +945,15 @@ object RoutesCompiler {
         )
     }.mkString("\n") +
       """|
+         |def comments = List(%s)
+         |
+      """.stripMargin.format(
+        rules.foldLeft(List[String]()) { 
+          case (acc, Route(_, _, _, comments)) => 
+            ("List(" + comments.map(_.comment).mkString("\"\"\"", "\"\"\",\"\"\"", "\"\"\"") + ")") +: acc
+          case (acc, Include(prefix, router)) => acc
+        }.reverse.mkString(",")) + 
+      """|
          |def documentation = List(%s).foldLeft(List.empty[(String,String,String)]) { (s,e) => e match {
          |  case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
          |  case l => s ++ l.asInstanceOf[List[(String,String,String)]] 
